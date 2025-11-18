@@ -2,18 +2,208 @@
   font-family: "Nunito", sans-serif;
 }
 
-*,
-*::after,
-*::before {
-  box-sizing: border-box;
-}
-
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 html,
 body {
   height: 100%;
+}
+
+.room-door {
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.room-door img {
+  width: 20px;
+}
+
+/* ---------------------------main */
+main {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+/* ---------------------------main */
+
+/* -----------------------aside */
+aside {
+  width: 300px;
+  box-shadow: 1px 0px 20px #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  gap: 20px;
+}
+
+aside h2 {
+  margin-top: 20px;
+  font-size: 25px;
+  font-weight: 900;
+}
+
+aside .workers-list {
+  height: 1000px;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+aside .workers-list .worker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 1px 0px 8px #ccc;
+  padding: 7px 10px;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  border-left: 3px solid #1138f7;
+}
+
+aside .profile-picture {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid gray;
+}
+
+aside .add-worker {
+  width: 200px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #1138f7;
+  color: white;
+  box-shadow: 1px 0px 8px #ccc;
+  font-weight: 600;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.add-worker:hover,
+aside .workers-list .worker:hover {
+  transform: translateY(-2px);
+}
+
+/* -----------------------aside */
+
+/* --------------------------section */
+.worksphere {
+  flex-grow: 1;
+  height: 100%;
+  width: 100%;
+  justify-items: center;
+  align-content: center;
+}
+
+.map-container {
+  /* background: url(plan.jpg) center/contain no-repeat; */
+  /*
+  position: relative;
+  height: 650px;
+  display: grid;
+  grid-template-columns: 3.5fr 1fr 1.5fr 1.5fr;
+  grid-template-rows: 1.8fr 1fr 2.2fr;
+  grid-auto-columns: 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "zone--conference . zone--server zone--security"
+    "zone--reception . . ."
+    "zone--reception . zone--staff zone--archives"; */
+  position: relative;
+}
+
+.zones {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.map-container .plan {
+  /* object-fit: contain; */
+  /* height: 100%; */
+  /* width: 100%; */
+  width: 70vw;
+}
+.zone--conference {
+  top: 0;
+  left: 0;
+  height: 30vh;
+  width: 27vw;
+}
+
+.zone--security {
+  right: 0;
+  width: 16vw;
+  height: 30vh;
+}
+
+.zone--reception {
+  height: 26vw;
+  width: 27vw;
+  bottom: 8px;
+  left: 0;
+}
+
+.zone--server {
+  right: 250px;
+  width: 15vw;
+  height: 30vh;
+}
+
+.zone--archives {
+  right: 0;
+  bottom: 8px;
+  width: 16vw;
+  height: 30vh;
+}
+
+.zone--staff {
+  right: 250px;
+  bottom: 8px;
+  width: 15vw;
+  height: 30vh;
+}
+
+.zone {
+  background-color: rgba(255, 255, 0, 0.261);
+  position: absolute;
+}
+
+.overlay {
+}
+
+.room-door {
+}
+
+.workers {
+}
+/* --------------------------section */
+
+/* -----------------------------popups */
+.add-worker-popup {
+  position: absolute;
+  width: 370px;
+  height: 600px;
+  background-color: white;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 50px;
+  border-radius: 5px;
+  border: none;
 }
