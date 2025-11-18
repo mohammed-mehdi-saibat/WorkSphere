@@ -18,9 +18,9 @@
     <main>
       <aside class="side-bar">
         <h2>Unassigned Staff</h2>
-        <button class="add-worker">Add Worker</button>
-        <div class="workers-list">
-          <div class="worker">
+        <button class="add-worker">Add a Worker</button>
+        <div class="workers-list" id="workers-list">
+          <div class="worker" id="1">
             <div class="profile-picture"></div>
             <div class="worker-info">
               <h5 class="name">Mohammed Mehdi Saibat</h5>
@@ -28,24 +28,18 @@
                 >Web Dev</small
               >
             </div>
-          </div>
-          <div class="worker">
-            <div class="profile-picture"></div>
-            <div class="worker-info">
-              <h5 class="name">Mohammed Mehdi Saibat</h5>
-              <small style="color: red; font-size: 12px" class="role"
-                >Web Dev</small
-              >
-            </div>
-          </div>
-          <div class="worker">
-            <div class="profile-picture"></div>
-            <div class="worker-info">
-              <h5 class="name">Mohammed Mehdi Saibat</h5>
-              <small style="color: red; font-size: 12px" class="role"
-                >Web Dev</small
-              >
-            </div>
+            <img
+              style="
+                width: 14px;
+                position: absolute;
+                right: 5px;
+                bottom: 8px;
+                cursor: pointer;
+              "
+              src="delete.png"
+              alt="delete"
+              id="delete"
+            />
           </div>
         </div>
       </aside>
@@ -92,8 +86,103 @@
           </div>
         </div>
       </section>
-      <dialog class="add-worker-popup">
-        <button class="close">X</button>
+      <dialog style="display: block" class="add-worker-popup">
+        <form action="">
+          <input type="text" name="nom" id="nom" placeholder="Nom:" />
+          <small
+            id="error"
+            style="
+              font-size: 11px;
+              align-self: flex-start;
+              margin-left: 30px;
+              color: red;
+              margin-top: 8px;
+              margin-bottom: 8px;
+            "
+            >Name</small
+          >
+          <input type="text" name="prenom" id="prenom" placeholder="Prénom:" />
+          <small
+            id="error"
+            style="
+              font-size: 11px;
+              align-self: flex-start;
+              margin-left: 30px;
+              color: red;
+              margin-top: 8px;
+              margin-bottom: 8px;
+            "
+            >Name</small
+          >
+          <input type="text" name="email" id="email" placeholder="Email:" />
+          <small
+            id="error"
+            style="
+              font-size: 11px;
+              align-self: flex-start;
+              margin-left: 30px;
+              color: red;
+              margin-top: 8px;
+              margin-bottom: 8px;
+            "
+            >Name</small
+          >
+          <input
+            type="text"
+            name="phone"
+            id="phone"
+            placeholder="Phone number:"
+          />
+          <small
+            id="error"
+            style="
+              font-size: 11px;
+              align-self: flex-start;
+              margin-left: 30px;
+              color: red;
+              margin-top: 8px;
+              margin-bottom: 8px;
+            "
+            >Name</small
+          >
+          <select name="roles" id="roles">
+            <option value="">Role</option>
+          </select>
+          <div class="profile">
+            <input
+              type="text"
+              name="profile"
+              id="profile"
+              placeholder="profile URL"
+            />
+            <div class="profile-picture"></div>
+          </div>
+          <label for="">Experiences</label>
+          <div class="experiences">
+            <input type="text" placeholder="Company:" />
+            <input type="text" placeholder="role" />
+            <div class="experience-dates">
+              <label for="from">From:</label>
+              <input
+                type="date"
+                name=""
+                id="from"
+                placeholder="mm/dd/yyyy"
+                onfocus="this.type='date'"
+                onblur="if(this.value === '') this.type='text'"
+              />
+              <label for="to">To</label>
+              <input type="date" / name="" id="to" placeholder="mm/dd/yyyy"
+              onfocus="this.type='date'" onblur="if(this.value === '')
+              this.type='text'">
+            </div>
+          </div>
+          <button id="add-experience">Add Experience</button>
+        </form>
+        <div class="buttons">
+          <button class="cancel" id="cancel">Cancel</button>
+          <button class="cancel" id="save">Save</button>
+        </div>
       </dialog>
     </main>
     <!-- JAVASCRIPT FILE LINK -->
