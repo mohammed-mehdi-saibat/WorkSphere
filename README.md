@@ -117,7 +117,7 @@ Lien de planification : (à compléter) <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 🌍 Déploiement
 
-🔗 Lien du site hébergé : (à compléter) <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+🔗 Lien du site hébergé : [https://mohammed-mehdi-saibat.github.io/WorkSphere/]
 🔗 Lien du repository : [https://github.com/mohammed-mehdi-saibat/WorkSphere]
 
 🧪 Critères de performance
