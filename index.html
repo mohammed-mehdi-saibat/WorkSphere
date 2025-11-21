@@ -19,29 +19,7 @@
       <aside class="side-bar">
         <h2>Unassigned Staff</h2>
         <button class="add-worker">Add a Worker</button>
-        <div class="workers-list" id="workers-list">
-          <div class="worker" id="1">
-            <div class="profile-picture"></div>
-            <div class="worker-info">
-              <h5 class="name">Mohammed Mehdi Saibat</h5>
-              <small style="color: red; font-size: 12px" class="role"
-                >Web Dev</small
-              >
-            </div>
-            <img
-              style="
-                width: 14px;
-                position: absolute;
-                right: 5px;
-                bottom: 8px;
-                cursor: pointer;
-              "
-              src="delete.png"
-              alt="delete"
-              id="delete"
-            />
-          </div>
-        </div>
+        <div class="workers-list" id="workers-list"></div>
       </aside>
       <section class="worksphere">
         <div class="map-container">
@@ -87,64 +65,33 @@
         </div>
       </section>
       <dialog style="display: block" class="add-worker-popup">
-        <form action="">
-          <input type="text" name="nom" id="nom" placeholder="Nom:" />
-          <small
-            id="error"
-            style="
-              font-size: 11px;
-              align-self: flex-start;
-              margin-left: 30px;
-              color: red;
-              margin-top: 8px;
-              margin-bottom: 8px;
-            "
-            >Name</small
-          >
-          <input type="text" name="prenom" id="prenom" placeholder="Prénom:" />
-          <small
-            id="error"
-            style="
-              font-size: 11px;
-              align-self: flex-start;
-              margin-left: 30px;
-              color: red;
-              margin-top: 8px;
-              margin-bottom: 8px;
-            "
-            >Name</small
-          >
-          <input type="text" name="email" id="email" placeholder="Email:" />
-          <small
-            id="error"
-            style="
-              font-size: 11px;
-              align-self: flex-start;
-              margin-left: 30px;
-              color: red;
-              margin-top: 8px;
-              margin-bottom: 8px;
-            "
-            >Name</small
-          >
-          <input
-            type="text"
-            name="phone"
-            id="phone"
-            placeholder="Phone number:"
-          />
-          <small
-            id="error"
-            style="
-              font-size: 11px;
-              align-self: flex-start;
-              margin-left: 30px;
-              color: red;
-              margin-top: 8px;
-              margin-bottom: 8px;
-            "
-            >Name</small
-          >
+        <form id="add-worker-form" action="">
+          <div class="nom">
+            <input type="text" name="nom" id="nom" placeholder="Nom:" />
+            <small class="error-message"></small>
+          </div>
+          <div class="prenom">
+            <input
+              type="text"
+              name="prenom"
+              id="prenom"
+              placeholder="Prénom:"
+            />
+            <small class="error-message"></small>
+          </div>
+          <div class="email">
+            <input type="text" name="email" id="email" placeholder="Email:" />
+            <small class="error-message"></small>
+          </div>
+          <div class="phone">
+            <input
+              type="text"
+              name="phone"
+              id="phone"
+              placeholder="Phone number:"
+            />
+            <small class="error-message"></small>
+          </div>
           <select name="roles" id="roles">
             <option value="">Role</option>
           </select>
@@ -153,14 +100,17 @@
               type="text"
               name="profile"
               id="profile"
-              placeholder="profile URL"
+              placeholder="profile URL:"
             />
             <div class="profile-picture"></div>
           </div>
+          <small class="error-message"></small>
           <label for="">Experiences</label>
           <div class="experiences">
-            <input type="text" placeholder="Company:" />
-            <input type="text" placeholder="role" />
+            <input id="experience" type="text" placeholder="Company:" />
+            <small class="error-message"></small>
+            <input id="experience-role" type="text" placeholder="role:" />
+            <small class="error-message"></small>
             <div class="experience-dates">
               <label for="from">From:</label>
               <input
@@ -177,6 +127,7 @@
               this.type='text'">
             </div>
           </div>
+          <button class="cancel-experience">Cancel Experience</button>
           <button id="add-experience">Add Experience</button>
         </form>
         <div class="buttons">

@@ -144,14 +144,14 @@ aside .workers-list .worker:hover {
 .zone--conference {
   top: 0;
   left: 0;
-  height: 30vh;
+  height: 13vw;
   width: 27vw;
 }
 
 .zone--security {
   right: 0;
   width: 16vw;
-  height: 30vh;
+  height: 14vw;
 }
 
 .zone--reception {
@@ -162,23 +162,23 @@ aside .workers-list .worker:hover {
 }
 
 .zone--server {
-  right: 250px;
+  right: 16vw;
   width: 15vw;
-  height: 30vh;
+  height: 14vw;
 }
 
 .zone--archives {
   right: 0;
   bottom: 8px;
   width: 16vw;
-  height: 30vh;
+  height: 14vw;
 }
 
 .zone--staff {
-  right: 250px;
+  right: 16vw;
   bottom: 8px;
   width: 15vw;
-  height: 30vh;
+  height: 14vw;
 }
 
 .zone {
@@ -225,6 +225,7 @@ aside .workers-list .worker:hover {
   border: none;
   border-left: 2px solid #1138f7;
   outline: none;
+  /* margin: 10px; */
 }
 
 select {
@@ -310,4 +311,34 @@ label {
   color: white;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.cancel-experience {
+  width: 80%;
+  padding: 8px 12px;
+  margin-top: 15px;
+  border: none;
+  background-color: rgb(228, 83, 83);
+  color: white;
+  border-radius: 5px;
+  display: none;
+}
+
+.showCancelButton {
+  display: block;
+}
+
+.error-message {
+  color: red;
+  font-size: 11px;
+  margin-top: 4px;
+  font-weight: 400;
+  min-height: 14px;
+  display: block;
+}
+
+.experiences-separator {
+  height: 1.5px;
+  background-color: black;
+  margin-bottom: 20px;
 }
