@@ -26,45 +26,78 @@
           <img class="plan" src="plan.jpg" alt="" />
           <div class="zones">
             <div class="zone zone--conference">
-              zone--conference
+              <div class="zone-title">zone--conference</div>
               <div class="overlay"></div>
-              <button class="room-door"><img src="add.png" alt="" /></button>
-              <div class="workers"></div>
+              <button id="zone-conference" class="room-door">
+                <img src="add.png" alt="" />
+              </button>
+              <div class="workers">
+                <p>ewkjnf</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+                <p>djfbsdj</p>
+              </div>
             </div>
             <div class="zone zone--reception">
-              zone--reception
+              <div class="zone-title">zone--reception</div>
               <div class="overlay"></div>
-              <button class="room-door"><img src="add.png" alt="" /></button>
+              <button id="zone-reception" class="room-door">
+                <img src="add.png" alt="" />
+              </button>
               <div class="workers"></div>
             </div>
             <div class="zone zone--server">
-              zone--server
+              <div class="zone-title">zone--server</div>
               <div class="overlay"></div>
-              <button class="room-door"><img src="add.png" alt="" /></button>
+              <button id="zone-server" class="room-door">
+                <img src="add.png" alt="" />
+              </button>
               <div class="workers"></div>
             </div>
             <div class="zone zone--security">
-              zone--security
+              <div class="zone-title">zone--security</div>
               <div class="overlay"></div>
-              <button class="room-door"><img src="add.png" alt="" /></button>
+              <button id="zone-security" class="room-door">
+                <img src="add.png" alt="" />
+              </button>
               <div class="workers"></div>
             </div>
             <div class="zone zone--staff">
-              zone--staff
+              <div class="zone-title">zone--staff</div>
               <div class="overlay"></div>
-              <button class="room-door"><img src="add.png" alt="" /></button>
+              <button id="zone-staff" class="room-door">
+                <img src="add.png" alt="" />
+              </button>
               <div class="workers"></div>
             </div>
             <div class="zone zone--archives">
-              zone--archives
+              <div class="zone-title">zone--archives</div>
               <div class="overlay"></div>
-              <button class="room-door"><img src="add.png" alt="" /></button>
+              <button id="zone-archives" class="room-door">
+                <img src="add.png" alt="" />
+              </button>
               <div class="workers"></div>
             </div>
           </div>
         </div>
       </section>
-      <dialog style="display: block" class="add-worker-popup">
+      <dialog class="add-worker-popup">
         <form id="add-worker-form" action="">
           <div class="nom">
             <input type="text" name="nom" id="nom" placeholder="Nom:" />
@@ -127,7 +160,6 @@
               this.type='text'">
             </div>
           </div>
-          <button class="cancel-experience">Cancel Experience</button>
           <button id="add-experience">Add Experience</button>
         </form>
         <div class="buttons">
@@ -135,6 +167,7 @@
           <button class="cancel" id="save">Save</button>
         </div>
       </dialog>
+      <dialog class="available-workers"></dialog>
     </main>
     <!-- JAVASCRIPT FILE LINK -->
     <script src="script.js"></script>

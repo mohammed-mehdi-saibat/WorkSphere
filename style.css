@@ -110,20 +110,6 @@ aside .workers-list .worker:hover {
 }
 
 .map-container {
-  /* background: url(plan.jpg) center/contain no-repeat; */
-  /*
-  position: relative;
-  height: 650px;
-  display: grid;
-  grid-template-columns: 3.5fr 1fr 1.5fr 1.5fr;
-  grid-template-rows: 1.8fr 1fr 2.2fr;
-  grid-auto-columns: 1fr;
-  gap: 0px 0px;
-  grid-auto-flow: row;
-  grid-template-areas:
-    "zone--conference . zone--server zone--security"
-    "zone--reception . . ."
-    "zone--reception . zone--staff zone--archives"; */
   position: relative;
 }
 
@@ -184,15 +170,45 @@ aside .workers-list .worker:hover {
 .zone {
   background-color: rgba(255, 255, 0, 0.261);
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.zone-title {
+  color: red;
+  font-size: 20px;
+  font-weight: 800;
+  background-color: rgba(254, 254, 254, 0.879);
+  padding: 0px 20px;
+  position: absolute;
+  top: 20px;
 }
 
 .overlay {
 }
 
+.room-door img {
+  width: 30px;
+}
+
 .room-door {
+  background-color: transparent;
+  border: none;
+  outline: none;
 }
 
 .workers {
+  width: auto;
+  height: 100px;
+  /* background-color: white; */
+  margin-bottom: -50px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
 }
 /* --------------------------section */
 
@@ -314,18 +330,15 @@ label {
 }
 
 .cancel-experience {
-  width: 80%;
+  width: 90%;
   padding: 8px 12px;
   margin-top: 15px;
   border: none;
   background-color: rgb(228, 83, 83);
   color: white;
   border-radius: 5px;
-  display: none;
-}
-
-.showCancelButton {
-  display: block;
+  cursor: pointer;
+  /* display: none; */
 }
 
 .error-message {
@@ -341,4 +354,21 @@ label {
   height: 1.5px;
   background-color: black;
   margin-bottom: 20px;
+}
+
+/* ------------------------------------Available Workers Popup */
+
+.available-workers {
+  position: absolute;
+  width: 370px;
+  height: 550px;
+  background-color: white;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 60px;
+  border-radius: 5px;
+  border: none;
+  padding: 20px;
+  text-align: center;
+  overflow-y: auto;
 }

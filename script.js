@@ -4,10 +4,14 @@
 //----BUTTONS
 const closeBtn = document.querySelector("#cancel");
 const saveBtn = document.querySelector("#save");
-const deleteBtn = document.getElementById("delete");
 const addWorker = document.querySelector(".add-worker");
 const addExperience = document.getElementById("add-experience");
-const cancelExperience = document.querySelector(".cancel-experience");
+const conferenceDoor = document.getElementById("zone-conference");
+const receptionDoor = document.getElementById("zone-reception");
+const serverDoor = document.getElementById("zone-server");
+const securityDoor = document.getElementById("zone-security");
+const staffDoor = document.getElementById("zone-staff");
+const archivesDoor = document.getElementById("zone-archives");
 //----BUTTONS
 //======================================================
 //----INPUTS
@@ -31,6 +35,13 @@ const worksphere = document.querySelector(".worksphere");
 const workersList = document.getElementById("workers-list");
 const addWorkerPopup = document.querySelector(".add-worker-popup");
 const experiences = document.querySelector(".experiences");
+const conferenceZone = document.querySelector(".zone--conference");
+const archivesZone = document.querySelector(".zone--archives");
+const receptionZone = document.querySelector(".zone--reception");
+const staffZone = document.querySelector(".zone--staff");
+const serverZone = document.querySelector(".zone--server");
+const securityZone = document.querySelector(".zone--security");
+const availableWorkersPopup = document.querySelector(".available-workers");
 //----MAIN CONTAINERS
 const workerProfilePicture = document.querySelector(".profile-picture");
 //======================================================
@@ -73,14 +84,14 @@ function addNewWorker() {
   closeBtn.addEventListener("click", () => {
     hideAddWorkerModal();
   });
-  saveBtn.addEventListener("click", () => {
-    addWorkerData();
+  saveBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    hideAddWorkerModal();
+    addToSideBar();
   });
   addExperience.addEventListener("click", (e) => {
     e.preventDefault();
     addNewExperience();
-    cancelExperience.classList.toggle("showCancelButton");
-    // console.log("Hey there I am the cancel button");
   });
 }
 
@@ -106,16 +117,18 @@ addWorkerPopup.addEventListener("click", (e) => {
   }
 });
 
-const workers = [];
+let workers = [];
+let id = 1;
 
-function addWorkerData() {
+function addToSideBar() {
   const worker = {
+    id: id,
     name: workerFirstName.value,
     lastName: workerLastName,
     email: workerEmail.value,
     phone: workerPhoneNumber.value,
     role: selectOptions.value,
-    profile: workerProfilePictureUrl.value,
+    profile: workerProfilePictureUrl.value || "profile-pic.webp",
     experiences: [
       {
         experience: workerExperience.value,
@@ -125,11 +138,10 @@ function addWorkerData() {
       },
     ],
   };
-
   const newWorker = document.createElement("div");
   newWorker.classList.add("worker");
   newWorker.innerHTML = `
-    <div id="profile-picture" class="profile-picture"></div>
+    <div class="profile-picture side-bar-profile-picture"></div>
     <div class="worker-info">
     <h5 class="name">${worker.name}</h5>
     <small style="color: red; font-size: 12px" class="role"
@@ -148,13 +160,22 @@ function addWorkerData() {
     alt="delete"
     id="delete"
     />
-    `;
+   `;
+  const newWorkerProfilePic = newWorker.querySelector(
+    ".side-bar-profile-picture"
+  );
   workerProfilePicture.style.background = `url("${worker.profile}") center/cover no-repeat`;
-
+  newWorkerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
   workersList.appendChild(newWorker);
+  id++;
   workers.push(worker);
   console.log(workers);
-  hideAddWorkerModal();
+  const deleteBtn = newWorker.querySelector("#delete");
+  deleteBtn.addEventListener("click", () => {
+    workersList.removeChild(newWorker);
+    // workers = workers.filter((w) => w.id !== id);
+    console.log(workers);
+  });
 }
 
 let newExperiences = [];
@@ -183,21 +204,86 @@ function addNewExperience() {
               onfocus="this.type='date'" onblur="if(this.value === '')
               this.type='text'">
             </div>
+            <button class="cancel-experience">Cancel Experience</button>
+
   `;
-
+  const cancelExperience = newExperience.querySelector(".cancel-experience");
+  experiences.appendChild(newExperience);
   newExperiences.push(newExperience);
-  console.log("=======================");
-  console.log("NEW EXPERIENCE WAS ADDED");
-  console.log(newExperiences);
-  console.log(`LENGTH: ${newExperiences.length}`);
-  console.log("=======================");
-
-  // experiences.appendChild(newExperience);
-  // console.log("Yo I'm working!");
-  // cancelExperience.addEventListener("click", (e) => {
-  //   e.preventDefault();
-  //   experiences.removeChild(newExperience);
-  // });
+  cancelExperience.addEventListener("click", (e) => {
+    e.preventDefault();
+    experiences.removeChild(newExperience);
+    console.log("Experience deleted");
+  });
 }
+
+conferenceDoor.addEventListener("click", (e) => {
+  e.preventDefault();
+  availableWorkersPopup.showModal();
+  sideBar.style.filter = "blur(1px)";
+  worksphere.style.filter = "blur(1px)";
+  availableWorkersPopup.innerHTML = `
+   <h3>CONFERENCE ROOM</h3>
+   <p>Available Workers:</p>
+  `;
+});
+receptionDoor.addEventListener("click", (e) => {
+  e.preventDefault();
+  availableWorkersPopup.showModal();
+  sideBar.style.filter = "blur(1px)";
+  worksphere.style.filter = "blur(1px)";
+  availableWorkersPopup.innerHTML = `
+   <h3>RECEPTION ROOM</h3>
+   <p>Available Workers:</p>
+  `;
+});
+serverDoor.addEventListener("click", (e) => {
+  e.preventDefault();
+  availableWorkersPopup.showModal();
+  sideBar.style.filter = "blur(1px)";
+  worksphere.style.filter = "blur(1px)";
+  availableWorkersPopup.innerHTML = `
+   <h3>SERVER ROOM</h3>
+   <p>Available Workers:</p>
+  `;
+});
+securityDoor.addEventListener("click", (e) => {
+  e.preventDefault();
+  availableWorkersPopup.showModal();
+  sideBar.style.filter = "blur(1px)";
+  worksphere.style.filter = "blur(1px)";
+  availableWorkersPopup.innerHTML = `
+   <h3>SECURITY ROOM</h3>
+   <p>Available Workers:</p>
+  `;
+});
+staffDoor.addEventListener("click", (e) => {
+  e.preventDefault();
+  availableWorkersPopup.showModal();
+  sideBar.style.filter = "blur(1px)";
+  worksphere.style.filter = "blur(1px)";
+  availableWorkersPopup.innerHTML = `
+   <h3>STAFF ROOM</h3>
+   <p>Available Workers:</p>
+  `;
+});
+archivesDoor.addEventListener("click", (e) => {
+  e.preventDefault();
+  availableWorkersPopup.showModal();
+  sideBar.style.filter = "blur(1px)";
+  worksphere.style.filter = "blur(1px)";
+  availableWorkersPopup.innerHTML = `
+   <h3>ARCHIVES ROOM</h3>
+   <p>Available Workers:</p>
+  `;
+});
+
+availableWorkersPopup.addEventListener("click", (e) => {
+  if (e.target === availableWorkersPopup) {
+    availableWorkersPopup.close();
+    sideBar.style.filter = "blur(0)";
+    worksphere.style.filter = "blur(0)";
+  }
+});
 // -------------------------STAFF MANIPULATION----------------
 //======================================================
