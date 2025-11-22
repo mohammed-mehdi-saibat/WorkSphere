@@ -53,7 +53,7 @@ const workerLastNameRegex = /^[a-zA-Z\s].{3,}$/;
 const workerExperienceRoleRegex = /^[a-zA-Z\s].{3,}$/;
 const workerExperienceRegex = /^[^\s][a-zA-Z0-9\s].{3,}$/;
 const workerEmailRegex = /^[^\s@]+@[^\s@]+.[^\s@]$/;
-const workerPhoneRegex = /^0[6-7]\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}$/;
+const workerPhoneRegex = /^0[5-6-7]\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}$/;
 
 //--------------------- REGEX CHECK-----------------
 //======================================================
@@ -118,13 +118,27 @@ addWorkerPopup.addEventListener("click", (e) => {
 });
 
 let workers = [];
+let itWorkers = [];
+let receptionists = [];
+let securityAgents = [];
+let managers = [];
+let nettoyageWorkers = [];
+
+function filterByRole() {
+  itWorkers = workers.filter((w) => w.role == "IT");
+  receptionists = workers.filter((w) => w.role == "Réceptionnistes");
+  securityAgents = workers.filter((w) => w.role == "Agents de sécurité");
+  managers = workers.filter((w) => w.role == "Manager");
+  nettoyageWorkers = workers.filter((w) => w.role == "Nettoyage");
+}
+
 let id = 1;
 
 function addToSideBar() {
   const worker = {
     id: id,
     name: workerFirstName.value,
-    lastName: workerLastName,
+    lastName: workerLastName.value,
     email: workerEmail.value,
     phone: workerPhoneNumber.value,
     role: selectOptions.value,
@@ -169,12 +183,14 @@ function addToSideBar() {
   workersList.appendChild(newWorker);
   id++;
   workers.push(worker);
-  console.log(workers);
+  filterByRole();
+  logAllWorkers();
   const deleteBtn = newWorker.querySelector("#delete");
   deleteBtn.addEventListener("click", () => {
     workersList.removeChild(newWorker);
-    // workers = workers.filter((w) => w.id !== id);
-    console.log(workers);
+    workers = workers.filter((w) => w.id !== worker.id);
+    filterByRole();
+    logAllWorkers();
   });
 }
 
@@ -213,7 +229,6 @@ function addNewExperience() {
   cancelExperience.addEventListener("click", (e) => {
     e.preventDefault();
     experiences.removeChild(newExperience);
-    console.log("Experience deleted");
   });
 }
 
@@ -287,3 +302,18 @@ availableWorkersPopup.addEventListener("click", (e) => {
 });
 // -------------------------STAFF MANIPULATION----------------
 //======================================================
+
+function logAllWorkers() {
+  // console.log("---- MASTER ARRAY ----");
+  // console.log(workers);
+  // console.log("---- IT Workers ----");
+  // console.log(itWorkers);
+  // console.log("---- Receptionists ----");
+  // console.log(receptionists);
+  // console.log("---- Security Agents ----");
+  // console.log(securityAgents);
+  // console.log("---- Managers ----");
+  // console.log(managers);
+  // console.log("---- Nettoyage Workers ----");
+  // console.log(nettoyageWorkers);
+}
