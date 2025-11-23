@@ -122,27 +122,41 @@
 
           <label for="">Experiences</label>
           <div class="experiences">
-            <input id="experience" type="text" placeholder="Company:" />
-            <small class="error-message"></small>
-            <input id="experience-role" type="text" placeholder="Role:" />
-            <small class="error-message"></small>
-            <div class="experience-dates">
-              <label for="from">From:</label>
+            <div class="experience initial-experience">
               <input
-                id="from"
-                type="date"
-                placeholder="mm/dd/yyyy"
-                onfocus="this.type='date'"
-                onblur="if(this.value==='')this.type='text'"
+                id="experience"
+                class="experience-input"
+                type="text"
+                placeholder="Company:"
               />
-              <label for="to">To</label>
+              <small class="error-message"></small>
               <input
-                id="to"
-                type="date"
-                placeholder="mm/dd/yyyy"
-                onfocus="this.type='date'"
-                onblur="if(this.value==='')this.type='text'"
+                id="experience-role"
+                class="experience-role-input"
+                type="text"
+                placeholder="Role:"
               />
+              <small class="error-message"></small>
+              <div class="experience-dates">
+                <label>From:</label>
+                <input
+                  id="from"
+                  class="experience-from"
+                  type="date"
+                  onfocus="this.type='date'"
+                  onblur="if(this.value==='')this.type='text'"
+                />
+                <small class="error-message"></small>
+                <label>To:</label>
+                <input
+                  id="to"
+                  class="experience-to"
+                  type="date"
+                  onfocus="this.type='date'"
+                  onblur="if(this.value==='')this.type='text'"
+                />
+                <small class="error-message"></small>
+              </div>
             </div>
           </div>
           <button id="add-experience" type="button">Add Experience</button>
@@ -152,8 +166,11 @@
           <button class="cancel" id="save" type="button" disabled>Save</button>
         </div>
       </dialog>
-
       <dialog class="available-workers"></dialog>
+      <dialog class="worker-profile-popup">
+        Profile
+        <button class="close-profile">Close</button>
+      </dialog>
     </main>
 
     <!-- JAVASCRIPT FILE LINK -->
