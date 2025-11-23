@@ -412,7 +412,7 @@ workers = [
     email: "henry.taylor@company.com",
     phone: "0689012345",
     role: "Agents de sécurité",
-    profile: "https://randomuser.me/api/portraits/men/8.jpg",
+    profile: "https://randomuser.me/api/portraits/men/20.jpg",
     assignedZone: null,
     experiences: [
       {
@@ -424,6 +424,27 @@ workers = [
     ],
   },
 ];
+
+//---------------------------------Zone rules-----------------
+const zoneRules = {
+  conference: ["all"],
+  reception: ["Réceptionnistes", "Manager"],
+  server: ["IT", "Manager"],
+  security: ["Agents de sécurité", "Manager"],
+  staff: ["all"],
+  archives: ["Réceptionnistes", "IT", "Agents de sécurité", "Manager"],
+};
+
+function getEligibleWorkers(zoneName) {
+  const allowedRoles = zoneRules[zoneName];
+
+  return workers.filter(
+    (worker) =>
+      worker.assignedZone === null &&
+      (allowedRoles.includes("all") || allowedRoles.includes(worker.role))
+  );
+}
+//---------------------------------Zone rules-----------------
 
 //----------------Workers to start with
 
@@ -458,54 +479,63 @@ function displayInitialWorkers() {
       workers = workers.filter((w) => w.id !== worker.id);
       filterByRole();
     });
-
-    newWorker.addEventListener("click", (e) => {
-      if (e.target.classList.contains("delete-worker")) return;
-
-      workerProfilePopup.innerHTML = `
-        <button class="close-profile">X</button>
-        <div class="profile-header">
-          <div class="profile-picture-large" style="background: url('${
-            worker.profile
-          }') center/cover no-repeat;"></div>
-          <h2>${worker.name} ${worker.lastName}</h2>
-          <p class="worker-role">${worker.role}</p>
-        </div>
-        <div class="profile-details">
-          <p><strong>Email:</strong> ${worker.email}</p>
-          <p><strong>Phone:</strong> ${worker.phone}</p>
-        </div>
-        <div class="profile-experiences">
-          <h3>Professional Experiences:</h3>
-          ${worker.experiences
-            .map(
-              (exp) => `
-            <div class="experience-item">
-              <p><strong>${exp.experienceRole}</strong> at <strong>${exp.experience}</strong></p>
-              <p><small>From: ${exp.from} - To: ${exp.to}</small></p>
-            </div>
-          `
-            )
-            .join("")}
-        </div>
-      `;
-
-      workerProfilePopup.showModal();
-      sideBar.style.filter = "blur(2.5px)";
-      worksphere.style.filter = "blur(2.5px)";
-
-      workerProfilePopup
-        .querySelector(".close-profile")
-        .addEventListener("click", () => {
-          workerProfilePopup.close();
-          sideBar.style.filter = "blur(0)";
-          worksphere.style.filter = "blur(0)";
-        });
-    });
   });
 }
 
 displayInitialWorkers();
+
+workersList.addEventListener("click", (e) => {
+  const workerCard = e.target.closest(".worker");
+
+  if (!workerCard) return;
+
+  if (e.target.classList.contains("delete-worker")) return;
+
+  const workerName = workerCard.querySelector(".name").textContent;
+  const worker = workers.find((w) => w.name === workerName);
+
+  if (!worker) return;
+
+  workerProfilePopup.innerHTML = `
+    <button class="close-profile">X</button>
+    <div class="profile-header">
+      <div class="profile-picture-large" style="background: url('${
+        worker.profile
+      }') center/cover no-repeat;"></div>
+      <h2>${worker.name} ${worker.lastName}</h2>
+      <p class="worker-role">${worker.role}</p>
+    </div>
+    <div class="profile-details">
+      <p><strong>Email:</strong> ${worker.email}</p>
+      <p><strong>Phone:</strong> ${worker.phone}</p>
+    </div>
+    <div class="profile-experiences">
+      <h3>Professional Experiences:</h3>
+      ${worker.experiences
+        .map(
+          (exp) => `
+        <div class="experience-item">
+          <p><strong>${exp.experienceRole}</strong> at <strong>${exp.experience}</strong></p>
+          <p><small>From: ${exp.from} - To: ${exp.to}</small></p>
+        </div>
+      `
+        )
+        .join("")}
+    </div>
+  `;
+
+  workerProfilePopup.showModal();
+  sideBar.style.filter = "blur(2.5px)";
+  worksphere.style.filter = "blur(2.5px)";
+
+  workerProfilePopup
+    .querySelector(".close-profile")
+    .addEventListener("click", () => {
+      workerProfilePopup.close();
+      sideBar.style.filter = "blur(0)";
+      worksphere.style.filter = "blur(0)";
+    });
+});
 // -----------------------DISPLAY INITIAL WORKERS-------------------
 
 function filterByRole() {
@@ -566,51 +596,6 @@ function addToSideBar() {
     workers = workers.filter((w) => w.id !== worker.id);
     filterByRole();
   });
-
-  assignBtn.addEventListener("click");
-
-  newWorker.addEventListener("click", (e) => {
-    if (e.target.classList.contains("delete-worker")) return;
-    workerProfilePopup.innerHTML = `
-    <button class="close-profile">X</button> 
-    <div class="profile-header">
-      <div class="profile-picture-large" style="background: url('${
-        worker.profile
-      }') center/cover no-repeat;"></div>
-      <h2>${worker.name} ${worker.lastName}</h2>
-      <p class="worker-role">${worker.role}</p>
-    </div>
-    <div class="profile-details">
-      <p><strong>Email:</strong> ${worker.email}</p>
-      <p><strong>Phone:</strong> ${worker.phone}</p>
-    </div>
-    <div class="profile-experiences">
-      <h3>Professional Experiences:</h3>
-      ${worker.experiences
-        .map(
-          (exp) => `
-        <div class="experience-item">
-          <p><strong>${exp.experienceRole}</strong> at <strong>${exp.experience}</strong></p>
-          <p><small>From: ${exp.from} - To: ${exp.to}</small></p>
-        </div>
-      `
-        )
-        .join("")}
-    </div>
-  `;
-
-    workerProfilePopup.showModal();
-    sideBar.style.filter = "blur(2.5px)";
-    worksphere.style.filter = "blur(2.5px)";
-
-    workerProfilePopup
-      .querySelector(".close-profile")
-      .addEventListener("click", () => {
-        workerProfilePopup.close();
-        sideBar.style.filter = "blur(0)";
-        worksphere.style.filter = "blur(0)";
-      });
-  });
 }
 
 let newExperiences = [initialExperience];
@@ -659,65 +644,227 @@ function addNewExperience() {
 
 //======================================================
 // ---------KNOCK-ON-DOOR LISTENERS-------------
+
 conferenceDoor.addEventListener("click", (e) => {
   e.preventDefault();
+
+  const eligibleWorkers = getEligibleWorkers("conference");
+
+  availableWorkersPopup.innerHTML = `
+    <h3>CONFERENCE ROOM</h3>
+    <p>Available Workers:</p>
+    <div class="popup-workers-list"></div>
+  `;
+
+  const popupWorkersList = availableWorkersPopup.querySelector(
+    ".popup-workers-list"
+  );
+
+  eligibleWorkers.forEach((worker) => {
+    const workerCard = document.createElement("div");
+    workerCard.classList.add("popup-worker");
+    workerCard.innerHTML = `
+      <div class="profile-picture popup-profile-picture"></div>
+      <div class="worker-info">
+        <h5 class="name">${worker.name}</h5>
+        <small style="color: red; font-size: 12px" class="role">${worker.role}</small>
+      </div>
+    `;
+
+    const workerProfilePic = workerCard.querySelector(".popup-profile-picture");
+    workerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
+    popupWorkersList.appendChild(workerCard);
+  });
+
   availableWorkersPopup.showModal();
   sideBar.style.filter = "blur(1px)";
   worksphere.style.filter = "blur(1px)";
-  availableWorkersPopup.innerHTML = `
-   <h3>CONFERENCE ROOM</h3>
-   <p>Available Workers:</p>
-  `;
 });
+
 receptionDoor.addEventListener("click", (e) => {
   e.preventDefault();
+
+  const eligibleWorkers = getEligibleWorkers("reception");
+
+  availableWorkersPopup.innerHTML = `
+    <h3>RECEPTION ROOM</h3>
+    <p>Available Workers:</p>
+    <div class="popup-workers-list"></div>
+  `;
+
+  const popupWorkersList = availableWorkersPopup.querySelector(
+    ".popup-workers-list"
+  );
+
+  eligibleWorkers.forEach((worker) => {
+    const workerCard = document.createElement("div");
+    workerCard.classList.add("popup-worker");
+    workerCard.innerHTML = `
+      <div class="profile-picture popup-profile-picture"></div>
+      <div class="worker-info">
+        <h5 class="name">${worker.name}</h5>
+        <small style="color: red; font-size: 12px" class="role">${worker.role}</small>
+      </div>
+    `;
+
+    const workerProfilePic = workerCard.querySelector(".popup-profile-picture");
+    workerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
+    popupWorkersList.appendChild(workerCard);
+  });
+
   availableWorkersPopup.showModal();
   sideBar.style.filter = "blur(1px)";
   worksphere.style.filter = "blur(1px)";
-  availableWorkersPopup.innerHTML = `
-   <h3>RECEPTION ROOM</h3>
-   <p>Available Workers:</p>
-  `;
 });
+
 serverDoor.addEventListener("click", (e) => {
   e.preventDefault();
+
+  const eligibleWorkers = getEligibleWorkers("server");
+
+  availableWorkersPopup.innerHTML = `
+    <h3>SERVER ROOM</h3>
+    <p>Available Workers:</p>
+    <div class="popup-workers-list"></div>
+  `;
+
+  const popupWorkersList = availableWorkersPopup.querySelector(
+    ".popup-workers-list"
+  );
+
+  eligibleWorkers.forEach((worker) => {
+    const workerCard = document.createElement("div");
+    workerCard.classList.add("popup-worker");
+    workerCard.innerHTML = `
+      <div class="profile-picture popup-profile-picture"></div>
+      <div class="worker-info">
+        <h5 class="name">${worker.name}</h5>
+        <small style="color: red; font-size: 12px" class="role">${worker.role}</small>
+      </div>
+    `;
+
+    const workerProfilePic = workerCard.querySelector(".popup-profile-picture");
+    workerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
+    popupWorkersList.appendChild(workerCard);
+  });
+
   availableWorkersPopup.showModal();
   sideBar.style.filter = "blur(1px)";
   worksphere.style.filter = "blur(1px)";
-  availableWorkersPopup.innerHTML = `
-   <h3>SERVER ROOM</h3>
-   <p>Available Workers:</p>
-  `;
 });
+
 securityDoor.addEventListener("click", (e) => {
   e.preventDefault();
+
+  const eligibleWorkers = getEligibleWorkers("security");
+
+  availableWorkersPopup.innerHTML = `
+    <h3>SECURITY ROOM</h3>
+    <p>Available Workers:</p>
+    <div class="popup-workers-list"></div>
+  `;
+
+  const popupWorkersList = availableWorkersPopup.querySelector(
+    ".popup-workers-list"
+  );
+
+  eligibleWorkers.forEach((worker) => {
+    const workerCard = document.createElement("div");
+    workerCard.classList.add("popup-worker");
+    workerCard.innerHTML = `
+      <div class="profile-picture popup-profile-picture"></div>
+      <div class="worker-info">
+        <h5 class="name">${worker.name}</h5>
+        <small style="color: red; font-size: 12px" class="role">${worker.role}</small>
+      </div>
+    `;
+
+    const workerProfilePic = workerCard.querySelector(".popup-profile-picture");
+    workerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
+    popupWorkersList.appendChild(workerCard);
+  });
+
   availableWorkersPopup.showModal();
   sideBar.style.filter = "blur(1px)";
   worksphere.style.filter = "blur(1px)";
-  availableWorkersPopup.innerHTML = `
-   <h3>SECURITY ROOM</h3>
-   <p>Available Workers:</p>
-  `;
 });
+
 staffDoor.addEventListener("click", (e) => {
   e.preventDefault();
+
+  const eligibleWorkers = getEligibleWorkers("staff");
+
+  availableWorkersPopup.innerHTML = `
+    <h3>STAFF ROOM</h3>
+    <p>Available Workers:</p>
+    <div class="popup-workers-list"></div>
+  `;
+
+  const popupWorkersList = availableWorkersPopup.querySelector(
+    ".popup-workers-list"
+  );
+
+  eligibleWorkers.forEach((worker) => {
+    const workerCard = document.createElement("div");
+    workerCard.classList.add("popup-worker");
+    workerCard.innerHTML = `
+      <div class="profile-picture popup-profile-picture"></div>
+      <div class="worker-info">
+        <h5 class="name">${worker.name}</h5>
+        <small style="color: red; font-size: 12px" class="role">${worker.role}</small>
+      </div>
+    `;
+
+    const workerProfilePic = workerCard.querySelector(".popup-profile-picture");
+    workerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
+    popupWorkersList.appendChild(workerCard);
+  });
+
   availableWorkersPopup.showModal();
   sideBar.style.filter = "blur(1px)";
   worksphere.style.filter = "blur(1px)";
-  availableWorkersPopup.innerHTML = `
-   <h3>STAFF ROOM</h3>
-   <p>Available Workers:</p>
-  `;
 });
+
 archivesDoor.addEventListener("click", (e) => {
   e.preventDefault();
+
+  const eligibleWorkers = getEligibleWorkers("archives");
+
+  availableWorkersPopup.innerHTML = `
+    <h3>ARCHIVES ROOM</h3>
+    <p>Available Workers:</p>
+    <div class="popup-workers-list"></div>
+  `;
+
+  const popupWorkersList = availableWorkersPopup.querySelector(
+    ".popup-workers-list"
+  );
+
+  eligibleWorkers.forEach((worker) => {
+    const workerCard = document.createElement("div");
+    workerCard.classList.add("popup-worker");
+    workerCard.innerHTML = `
+      <div class="profile-picture popup-profile-picture"></div>
+      <div class="worker-info">
+        <h5 class="name">${worker.name}</h5>
+        <small style="color: red; font-size: 12px" class="role">${worker.role}</small>
+      </div>
+    `;
+
+    const workerProfilePic = workerCard.querySelector(".popup-profile-picture");
+    workerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
+    popupWorkersList.appendChild(workerCard);
+  });
+
   availableWorkersPopup.showModal();
   sideBar.style.filter = "blur(1px)";
   worksphere.style.filter = "blur(1px)";
-  availableWorkersPopup.innerHTML = `
-   <h3>ARCHIVES ROOM</h3>
-   <p>Available Workers:</p>
-  `;
 });
 
 availableWorkersPopup.addEventListener("click", (e) => {
@@ -729,7 +876,6 @@ availableWorkersPopup.addEventListener("click", (e) => {
 });
 // ---------KNOCK-ON-DOOR LISTENERS-------------
 //======================================================
-
 //-----------------------HIDE PROFILE-----------------
 workerProfilePopup.addEventListener("click", (e) => {
   if (e.target === workerProfilePopup) {
