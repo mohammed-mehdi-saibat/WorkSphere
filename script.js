@@ -12,6 +12,7 @@ const serverDoor = document.getElementById("zone-server");
 const securityDoor = document.getElementById("zone-security");
 const staffDoor = document.getElementById("zone-staff");
 const archivesDoor = document.getElementById("zone-archives");
+const closeProfileBtn = document.querySelector(".close-profile");
 //----BUTTONS
 //======================================================
 //----INPUTS
@@ -45,6 +46,8 @@ const addWorkerPopup = document.querySelector(".add-worker-popup");
 const experiences = document.querySelector(".experiences");
 const availableWorkersPopup = document.querySelector(".available-workers");
 const workerProfilePicture = document.querySelector(".profile-picture");
+const initialExperience = document.querySelector(".initial-experience");
+const workerProfilePopup = document.querySelector(".worker-profile-popup");
 //======================================================
 // --------------------SIDE BAR MATERIAL--------------7
 //======================================================
@@ -121,6 +124,56 @@ function validateRoleSelect() {
   }
 }
 
+function validateAllExperiences() {
+  let allValid = true;
+
+  newExperiences.forEach((exp) => {
+    const companyInput = exp.querySelector(".experience-input");
+    const roleInput = exp.querySelector(".experience-role-input");
+    const fromInput = exp.querySelector(".experience-from");
+    const toInput = exp.querySelector(".experience-to");
+
+    const companyError = companyInput.nextElementSibling;
+    const roleError = roleInput.nextElementSibling;
+    const fromError = fromInput.nextElementSibling;
+    const toError = toInput.nextElementSibling;
+
+    if (!companyInput.value.match(workerExperienceRegex)) {
+      companyError.textContent = "Invalid company name!";
+      allValid = false;
+    } else companyError.textContent = "";
+
+    if (!roleInput.value.match(workerExperienceRoleRegex)) {
+      roleError.textContent = "Invalid role input!";
+      allValid = false;
+    } else roleError.textContent = "";
+
+    if (!fromInput.value) {
+      fromError.textContent = "Start date required!";
+      allValid = false;
+    } else fromError.textContent = "";
+
+    if (!toInput.value) {
+      toError.textContent = "End date required!";
+      allValid = false;
+    } else toError.textContent = "";
+
+    if (fromInput.value && toInput.value) {
+      const fromDate = new Date(fromInput.value);
+      const toDate = new Date(toInput.value);
+
+      if (toDate < fromDate) {
+        toError.textContent = "End date must be after start date!";
+        allValid = false;
+      } else {
+        toError.textContent = "";
+      }
+    }
+  });
+
+  return allValid;
+}
+
 workerFirstName.addEventListener("input", validateFirstName);
 workerLastName.addEventListener("input", validateLastName);
 workerExperience.addEventListener("input", validateExperience);
@@ -128,12 +181,17 @@ workerEmail.addEventListener("input", validateEmail);
 workerPhoneNumber.addEventListener("input", validatePhone);
 workerExperienceRole.addEventListener("input", validateExperienceRole);
 selectOptions.addEventListener("change", validateRoleSelect);
+
+const initialFrom = document.querySelector("#from");
+const initialTo = document.querySelector("#to");
+initialFrom.addEventListener("input", checkAllValid);
+initialTo.addEventListener("input", checkAllValid);
+
 workerProfilePictureUrl.addEventListener("input", () => {
   const url = workerProfilePictureUrl.value || "profile-pic.webp";
   workerProfilePicture.style.background = `url("${url}") center/cover no-repeat`;
 });
 
-// ---------------DISABLE SAVE BUTTON IF AT LEAST ONE INPUT IS INVALID------------------
 function checkAllValid() {
   const allValid =
     validateFirstName() &&
@@ -142,7 +200,8 @@ function checkAllValid() {
     validatePhone() &&
     validateExperience() &&
     validateExperienceRole() &&
-    validateRoleSelect();
+    validateRoleSelect() &&
+    validateAllExperiences();
 
   saveBtn.disabled = !allValid;
   return allValid;
@@ -155,8 +214,7 @@ workerPhoneNumber.addEventListener("input", checkAllValid);
 workerExperience.addEventListener("input", checkAllValid);
 workerExperienceRole.addEventListener("input", checkAllValid);
 selectOptions.addEventListener("change", checkAllValid);
-// ---------------DISABLE SAVE BUTTON IF AT LEAST ONE INPUT IS INVALID------------------
-//--------------------- REGEX CHECK-----------------
+
 //======================================================
 // -----------------------ROLES SELECTION-------------------
 const roles = [
@@ -167,34 +225,24 @@ const roles = [
   "Nettoyage",
 ];
 
-function rolesFill() {
-  roles.forEach((role) => {
-    const option = document.createElement("option");
-    option.textContent = role;
-    selectOptions.appendChild(option);
-  });
-}
-rolesFill();
+roles.forEach((role) => {
+  const option = document.createElement("option");
+  option.textContent = role;
+  selectOptions.appendChild(option);
+});
 // -----------------------ROLES SELECTION-------------------
 //======================================================
 // -------------------------STAFF MANIPULATION----------------
 function addNewWorker() {
-  addWorker.addEventListener("click", () => {
-    showAddWorkerModal();
-  });
-  closeBtn.addEventListener("click", () => {
-    hideAddWorkerModal();
-  });
+  addWorker.addEventListener("click", showAddWorkerModal);
+  closeBtn.addEventListener("click", hideAddWorkerModal);
   saveBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    if (!checkAllValid()) return;
+    if (!checkAllValid() || !validateAllExperiences()) return;
     hideAddWorkerModal();
     addToSideBar();
   });
-  addExperience.addEventListener("click", (e) => {
-    e.preventDefault();
-    addNewExperience();
-  });
+  addExperience.addEventListener("click", addNewExperience);
 }
 
 addNewWorker();
@@ -212,11 +260,7 @@ function hideAddWorkerModal() {
 }
 
 addWorkerPopup.addEventListener("click", (e) => {
-  if (e.target === addWorkerPopup) {
-    addWorkerPopup.close();
-    sideBar.style.filter = "blur(0)";
-    worksphere.style.filter = "blur(0)";
-  }
+  if (e.target === addWorkerPopup) hideAddWorkerModal();
 });
 
 let workers = [];
@@ -245,15 +289,14 @@ function addToSideBar() {
     phone: workerPhoneNumber.value,
     role: selectOptions.value,
     profile: workerProfilePictureUrl.value || "profile-pic.webp",
-    experiences: [
-      {
-        experience: workerExperience.value,
-        experienceRole: workerExperienceRole.value,
-        from: document.getElementById("from").value,
-        to: document.getElementById("to").value,
-      },
-    ],
+    experiences: newExperiences.map((exp) => ({
+      experience: exp.querySelector(".experience-input").value,
+      experienceRole: exp.querySelector(".experience-role-input").value,
+      from: exp.querySelector(".experience-from").value,
+      to: exp.querySelector(".experience-to").value,
+    })),
   };
+
   const newWorker = document.createElement("div");
   newWorker.classList.add("worker");
   newWorker.innerHTML = `
@@ -269,23 +312,68 @@ function addToSideBar() {
       class="delete-worker"
     />
   `;
+
   const newWorkerProfilePic = newWorker.querySelector(
     ".side-bar-profile-picture"
   );
   newWorkerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
   workersList.appendChild(newWorker);
   id++;
   workers.push(worker);
   filterByRole();
-  const deleteBtn = newWorker.querySelector(".delete-worker");
-  deleteBtn.addEventListener("click", () => {
+
+  newWorker.querySelector(".delete-worker").addEventListener("click", () => {
     workersList.removeChild(newWorker);
     workers = workers.filter((w) => w.id !== worker.id);
     filterByRole();
   });
+
+  newWorker.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete-worker")) return;
+    workerProfilePopup.innerHTML = `
+    <button class="close-profile">X</button>
+    <div class="profile-header">
+      <div class="profile-picture-large" style="background: url('${
+        worker.profile
+      }') center/cover no-repeat;"></div>
+      <h2>${worker.name} ${worker.lastName}</h2>
+      <p class="worker-role">${worker.role}</p>
+    </div>
+    <div class="profile-details">
+      <p><strong>Email:</strong> ${worker.email}</p>
+      <p><strong>Phone:</strong> ${worker.phone}</p>
+    </div>
+    <div class="profile-experiences">
+      <h3>Professional Experiences:</h3>
+      ${worker.experiences
+        .map(
+          (exp) => `
+        <div class="experience-item">
+          <p><strong>${exp.experienceRole}</strong> at <strong>${exp.experience}</strong></p>
+          <p><small>From: ${exp.from} - To: ${exp.to}</small></p>
+        </div>
+      `
+        )
+        .join("")}
+    </div>
+  `;
+
+    workerProfilePopup.showModal();
+    sideBar.style.filter = "blur(2.5px)";
+    worksphere.style.filter = "blur(2.5px)";
+
+    workerProfilePopup
+      .querySelector(".close-profile")
+      .addEventListener("click", () => {
+        workerProfilePopup.close();
+        sideBar.style.filter = "blur(0)";
+        worksphere.style.filter = "blur(0)";
+      });
+  });
 }
 
-let newExperiences = [];
+let newExperiences = [initialExperience];
 
 function addNewExperience() {
   const newExperience = document.createElement("div");
@@ -299,21 +387,36 @@ function addNewExperience() {
     <div class="experience-dates">
       <label>From:</label>
       <input class="experience-from" type="date" onfocus="this.type='date'" onblur="if(this.value==='')this.type='text'" />
+      <small class="error-message"></small>
       <label>To:</label>
       <input class="experience-to" type="date" onfocus="this.type='date'" onblur="if(this.value==='')this.type='text'" />
+      <small class="error-message"></small>
     </div>
     <button class="cancel-experience" type="button">Cancel Experience</button>
   `;
-  const cancelExperience = newExperience.querySelector(".cancel-experience");
+
   experiences.appendChild(newExperience);
   newExperiences.push(newExperience);
-  cancelExperience.addEventListener("click", (e) => {
-    e.preventDefault();
-    experiences.removeChild(newExperience);
-    newExperiences = newExperiences.filter((exp) => exp !== newExperience);
-  });
+
+  const companyInput = newExperience.querySelector(".experience-input");
+  const roleInput = newExperience.querySelector(".experience-role-input");
+  const fromInput = newExperience.querySelector(".experience-from");
+  const toInput = newExperience.querySelector(".experience-to");
+
+  companyInput.addEventListener("input", checkAllValid);
+  roleInput.addEventListener("input", checkAllValid);
+  fromInput.addEventListener("input", checkAllValid);
+  toInput.addEventListener("input", checkAllValid);
+
+  newExperience
+    .querySelector(".cancel-experience")
+    .addEventListener("click", () => {
+      experiences.removeChild(newExperience);
+      newExperiences = newExperiences.filter((exp) => exp !== newExperience);
+      checkAllValid();
+    });
 }
-// -------------------------STAFF MANIPULATION----------------
+
 //======================================================
 // ---------KNOCK-ON-DOOR LISTENERS-------------
 conferenceDoor.addEventListener("click", (e) => {
@@ -386,3 +489,12 @@ availableWorkersPopup.addEventListener("click", (e) => {
 });
 // ---------KNOCK-ON-DOOR LISTENERS-------------
 //======================================================
+
+//-----------------------HIDE PROFILE-----------------
+workerProfilePopup.addEventListener("click", (e) => {
+  if (e.target === workerProfilePopup) {
+    workerProfilePopup.close();
+    sideBar.style.filter = "blur(0)";
+    worksphere.style.filter = "blur(0)";
+  }
+});
