@@ -48,6 +48,7 @@ const availableWorkersPopup = document.querySelector(".available-workers");
 const workerProfilePicture = document.querySelector(".profile-picture");
 const initialExperience = document.querySelector(".initial-experience");
 const workerProfilePopup = document.querySelector(".worker-profile-popup");
+const initialWorker = document.querySelector(".initial-worker");
 //======================================================
 // --------------------SIDE BAR MATERIAL--------------7
 //======================================================
@@ -270,6 +271,243 @@ let securityAgents = [];
 let managers = [];
 let nettoyageWorkers = [];
 
+//----------------Workers to start with
+workers = [
+  {
+    id: 1,
+    name: "Alice",
+    lastName: "Johnson",
+    email: "alice.johnson@company.com",
+    phone: "0612345678",
+    role: "Réceptionnistes",
+    profile: "https://randomuser.me/api/portraits/women/1.jpg",
+    assignedZone: null,
+    experiences: [
+      {
+        experience: "Tech Corp",
+        experienceRole: "Receptionist",
+        from: "2020-01-15",
+        to: "2022-12-31",
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: "Bob",
+    lastName: "Smith",
+    email: "bob.smith@company.com",
+    phone: "0623456789",
+    role: "IT",
+    profile: "https://randomuser.me/api/portraits/men/2.jpg",
+    assignedZone: null,
+    experiences: [
+      {
+        experience: "Digital Solutions",
+        experienceRole: "System Admin",
+        from: "2019-03-10",
+        to: "2023-06-20",
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: "Charlie",
+    lastName: "Brown",
+    email: "charlie.brown@company.com",
+    phone: "0634567890",
+    role: "Agents de sécurité",
+    profile: "https://randomuser.me/api/portraits/men/3.jpg",
+    assignedZone: null,
+    experiences: [
+      {
+        experience: "SecureGuard Inc",
+        experienceRole: "Security Officer",
+        from: "2018-07-01",
+        to: "2023-09-15",
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: "Diana",
+    lastName: "Martinez",
+    email: "diana.martinez@company.com",
+    phone: "0645678901",
+    role: "Manager",
+    profile: "https://randomuser.me/api/portraits/women/4.jpg",
+    assignedZone: null,
+    experiences: [
+      {
+        experience: "Business Leaders",
+        experienceRole: "Team Manager",
+        from: "2017-02-20",
+        to: "2023-11-30",
+      },
+      {
+        experience: "Startup Hub",
+        experienceRole: "Project Lead",
+        from: "2015-05-10",
+        to: "2016-12-15",
+      },
+    ],
+  },
+  {
+    id: 5,
+    name: "Emma",
+    lastName: "Wilson",
+    email: "emma.wilson@company.com",
+    phone: "0656789012",
+    role: "Nettoyage",
+    profile: "https://randomuser.me/api/portraits/women/5.jpg",
+    assignedZone: null,
+    experiences: [
+      {
+        experience: "Clean Pro Services",
+        experienceRole: "Cleaning Specialist",
+        from: "2021-01-05",
+        to: "2023-10-10",
+      },
+    ],
+  },
+  {
+    id: 6,
+    name: "Frank",
+    lastName: "Davis",
+    email: "frank.davis@company.com",
+    phone: "0667890123",
+    role: "IT",
+    profile: "https://randomuser.me/api/portraits/men/6.jpg",
+    assignedZone: null,
+    experiences: [
+      {
+        experience: "Code Masters",
+        experienceRole: "Network Engineer",
+        from: "2020-06-15",
+        to: "2023-08-25",
+      },
+    ],
+  },
+  {
+    id: 7,
+    name: "Grace",
+    lastName: "Lee",
+    email: "grace.lee@company.com",
+    phone: "0678901234",
+    role: "Réceptionnistes",
+    profile: "https://randomuser.me/api/portraits/women/7.jpg",
+    assignedZone: null,
+    experiences: [
+      {
+        experience: "Hospitality Plus",
+        experienceRole: "Front Desk",
+        from: "2019-09-01",
+        to: "2023-07-31",
+      },
+    ],
+  },
+  {
+    id: 8,
+    name: "Henry",
+    lastName: "Taylor",
+    email: "henry.taylor@company.com",
+    phone: "0689012345",
+    role: "Agents de sécurité",
+    profile: "https://randomuser.me/api/portraits/men/8.jpg",
+    assignedZone: null,
+    experiences: [
+      {
+        experience: "SafeWatch Security",
+        experienceRole: "Security Guard",
+        from: "2020-11-20",
+        to: "2023-12-01",
+      },
+    ],
+  },
+];
+
+//----------------Workers to start with
+
+// -----------------------DISPLAY INITIAL WORKERS-------------------
+function displayInitialWorkers() {
+  workers.forEach((worker) => {
+    const newWorker = document.createElement("div");
+    newWorker.classList.add("worker");
+    newWorker.innerHTML = `
+      <div class="profile-picture side-bar-profile-picture"></div>
+      <div class="worker-info">
+        <h5 class="name">${worker.name}</h5>
+        <small style="color: red; font-size: 12px" class="role">${worker.role}</small>
+      </div>
+      <img
+        style="width: 14px; position: absolute; right: 5px; bottom: 8px; cursor: pointer;"
+        src="delete.png"
+        alt="delete"
+        class="delete-worker"
+      />
+    `;
+
+    const newWorkerProfilePic = newWorker.querySelector(
+      ".side-bar-profile-picture"
+    );
+    newWorkerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
+    workersList.appendChild(newWorker);
+
+    newWorker.querySelector(".delete-worker").addEventListener("click", () => {
+      workersList.removeChild(newWorker);
+      workers = workers.filter((w) => w.id !== worker.id);
+      filterByRole();
+    });
+
+    newWorker.addEventListener("click", (e) => {
+      if (e.target.classList.contains("delete-worker")) return;
+
+      workerProfilePopup.innerHTML = `
+        <button class="close-profile">X</button>
+        <div class="profile-header">
+          <div class="profile-picture-large" style="background: url('${
+            worker.profile
+          }') center/cover no-repeat;"></div>
+          <h2>${worker.name} ${worker.lastName}</h2>
+          <p class="worker-role">${worker.role}</p>
+        </div>
+        <div class="profile-details">
+          <p><strong>Email:</strong> ${worker.email}</p>
+          <p><strong>Phone:</strong> ${worker.phone}</p>
+        </div>
+        <div class="profile-experiences">
+          <h3>Professional Experiences:</h3>
+          ${worker.experiences
+            .map(
+              (exp) => `
+            <div class="experience-item">
+              <p><strong>${exp.experienceRole}</strong> at <strong>${exp.experience}</strong></p>
+              <p><small>From: ${exp.from} - To: ${exp.to}</small></p>
+            </div>
+          `
+            )
+            .join("")}
+        </div>
+      `;
+
+      workerProfilePopup.showModal();
+      sideBar.style.filter = "blur(2.5px)";
+      worksphere.style.filter = "blur(2.5px)";
+
+      workerProfilePopup
+        .querySelector(".close-profile")
+        .addEventListener("click", () => {
+          workerProfilePopup.close();
+          sideBar.style.filter = "blur(0)";
+          worksphere.style.filter = "blur(0)";
+        });
+    });
+  });
+}
+
+displayInitialWorkers();
+// -----------------------DISPLAY INITIAL WORKERS-------------------
+
 function filterByRole() {
   itWorkers = workers.filter((w) => w.role == "IT");
   receptionists = workers.filter((w) => w.role == "Réceptionnistes");
@@ -278,7 +516,7 @@ function filterByRole() {
   nettoyageWorkers = workers.filter((w) => w.role == "Nettoyage");
 }
 
-let id = 1;
+let id = workers.length + 1;
 
 function addToSideBar() {
   const worker = {
@@ -289,6 +527,7 @@ function addToSideBar() {
     phone: workerPhoneNumber.value,
     role: selectOptions.value,
     profile: workerProfilePictureUrl.value || "profile-pic.webp",
+    assignedZone: null,
     experiences: newExperiences.map((exp) => ({
       experience: exp.querySelector(".experience-input").value,
       experienceRole: exp.querySelector(".experience-role-input").value,
@@ -317,10 +556,9 @@ function addToSideBar() {
     ".side-bar-profile-picture"
   );
   newWorkerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
-
   workersList.appendChild(newWorker);
-  id++;
   workers.push(worker);
+  id++;
   filterByRole();
 
   newWorker.querySelector(".delete-worker").addEventListener("click", () => {
@@ -329,10 +567,12 @@ function addToSideBar() {
     filterByRole();
   });
 
+  assignBtn.addEventListener("click");
+
   newWorker.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete-worker")) return;
     workerProfilePopup.innerHTML = `
-    <button class="close-profile">X</button>
+    <button class="close-profile">X</button> 
     <div class="profile-header">
       <div class="profile-picture-large" style="background: url('${
         worker.profile
