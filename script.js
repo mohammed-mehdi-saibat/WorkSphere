@@ -21,12 +21,20 @@ const workerPhoneNumber = document.getElementById("phone");
 const workerLastName = document.getElementById("prenom");
 const workerEmail = document.getElementById("email");
 const workerProfilePictureUrl = document.getElementById("profile");
-const workerExperienceStart = document.getElementById("from");
 const workerExperienceEnd = document.getElementById("to");
 const workerExperienceRole = document.getElementById("experience-role");
 const selectOptions = document.getElementById("roles");
 const workerExperience = document.getElementById("experience");
 const error = document.querySelector(".error-message");
+// --------------ERROR MESSAGES CONTAINERS
+const firstNameError = workerFirstName.nextElementSibling;
+const lastNameError = workerLastName.nextElementSibling;
+const emailError = workerEmail.nextElementSibling;
+const phoneError = workerPhoneNumber.nextElementSibling;
+const profileError = workerProfilePictureUrl.nextElementSibling;
+const experienceError = workerExperience.nextElementSibling;
+const experienceRoleError = workerExperienceRole.nextElementSibling;
+// --------------ERROR MESSAGES CONTAINERS
 //----INPUTS
 //======================================================
 //----MAIN CONTAINERS
@@ -35,26 +43,119 @@ const worksphere = document.querySelector(".worksphere");
 const workersList = document.getElementById("workers-list");
 const addWorkerPopup = document.querySelector(".add-worker-popup");
 const experiences = document.querySelector(".experiences");
-const conferenceZone = document.querySelector(".zone--conference");
-const archivesZone = document.querySelector(".zone--archives");
-const receptionZone = document.querySelector(".zone--reception");
-const staffZone = document.querySelector(".zone--staff");
-const serverZone = document.querySelector(".zone--server");
-const securityZone = document.querySelector(".zone--security");
 const availableWorkersPopup = document.querySelector(".available-workers");
-//----MAIN CONTAINERS
 const workerProfilePicture = document.querySelector(".profile-picture");
 //======================================================
 // --------------------SIDE BAR MATERIAL--------------7
 //======================================================
 //--------------------- REGEX CHECK-----------------
-const workerFirstNameRegex = /^[a-zA-Z\s].{3,}$/;
-const workerLastNameRegex = /^[a-zA-Z\s].{3,}$/;
-const workerExperienceRoleRegex = /^[a-zA-Z\s].{3,}$/;
-const workerExperienceRegex = /^[^\s][a-zA-Z0-9\s].{3,}$/;
-const workerEmailRegex = /^[^\s@]+@[^\s@]+.[^\s@]$/;
+const workerFirstNameRegex = /^[a-zA-Z\s]{4,}$/;
+const workerLastNameRegex = /^[a-zA-Z\s]{4,}$/;
+const workerExperienceRoleRegex = /^[a-zA-Z\s]{4,}$/;
+const workerExperienceRegex = /^[a-zA-Z\s]{3,}$/;
+const workerEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const workerPhoneRegex = /^0[5-6-7]\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}$/;
 
+function validateFirstName() {
+  if (!workerFirstName.value.match(workerFirstNameRegex)) {
+    firstNameError.textContent = "At least 4 long, characters only!";
+    return false;
+  } else {
+    firstNameError.textContent = "";
+    return true;
+  }
+}
+function validateLastName() {
+  if (!workerLastName.value.match(workerLastNameRegex)) {
+    lastNameError.textContent = "At least 4 characters, letters only!";
+    return false;
+  } else {
+    lastNameError.textContent = "";
+    return true;
+  }
+}
+function validateEmail() {
+  if (!workerEmail.value.match(workerEmailRegex)) {
+    emailError.textContent = "Invalid email form!";
+    return false;
+  } else {
+    emailError.textContent = "";
+    return true;
+  }
+}
+function validatePhone() {
+  if (!workerPhoneNumber.value.match(workerPhoneRegex)) {
+    phoneError.textContent = "Invalid phone number!";
+    return false;
+  } else {
+    phoneError.textContent = "";
+    return true;
+  }
+}
+function validateExperience() {
+  if (!workerExperience.value.match(workerExperienceRegex)) {
+    experienceError.textContent = "Invalid company name!";
+    return false;
+  } else {
+    experienceError.textContent = "";
+    return true;
+  }
+}
+function validateExperienceRole() {
+  if (!workerExperienceRole.value.match(workerExperienceRoleRegex)) {
+    experienceRoleError.textContent = "Invalid role name!";
+    return false;
+  } else {
+    experienceRoleError.textContent = "";
+    return true;
+  }
+}
+
+function validateRoleSelect() {
+  if (!selectOptions.value) {
+    selectOptions.style.border = "3px solid red";
+    return false;
+  } else {
+    selectOptions.style.border = "";
+    return true;
+  }
+}
+
+workerFirstName.addEventListener("input", validateFirstName);
+workerLastName.addEventListener("input", validateLastName);
+workerExperience.addEventListener("input", validateExperience);
+workerEmail.addEventListener("input", validateEmail);
+workerPhoneNumber.addEventListener("input", validatePhone);
+workerExperienceRole.addEventListener("input", validateExperienceRole);
+selectOptions.addEventListener("change", validateRoleSelect);
+workerProfilePictureUrl.addEventListener("input", () => {
+  const url = workerProfilePictureUrl.value || "profile-pic.webp";
+  workerProfilePicture.style.background = `url("${url}") center/cover no-repeat`;
+});
+
+// ---------------DISABLE SAVE BUTTON IF AT LEAST ONE INPUT IS INVALID------------------
+function checkAllValid() {
+  const allValid =
+    validateFirstName() &&
+    validateLastName() &&
+    validateEmail() &&
+    validatePhone() &&
+    validateExperience() &&
+    validateExperienceRole() &&
+    validateRoleSelect();
+
+  saveBtn.disabled = !allValid;
+  return allValid;
+}
+
+workerFirstName.addEventListener("input", checkAllValid);
+workerLastName.addEventListener("input", checkAllValid);
+workerEmail.addEventListener("input", checkAllValid);
+workerPhoneNumber.addEventListener("input", checkAllValid);
+workerExperience.addEventListener("input", checkAllValid);
+workerExperienceRole.addEventListener("input", checkAllValid);
+selectOptions.addEventListener("change", checkAllValid);
+// ---------------DISABLE SAVE BUTTON IF AT LEAST ONE INPUT IS INVALID------------------
 //--------------------- REGEX CHECK-----------------
 //======================================================
 // -----------------------ROLES SELECTION-------------------
@@ -86,6 +187,7 @@ function addNewWorker() {
   });
   saveBtn.addEventListener("click", (e) => {
     e.preventDefault();
+    if (!checkAllValid()) return;
     hideAddWorkerModal();
     addToSideBar();
   });
@@ -147,8 +249,8 @@ function addToSideBar() {
       {
         experience: workerExperience.value,
         experienceRole: workerExperienceRole.value,
-        from: workerExperienceStart.value,
-        to: workerExperienceEnd.value,
+        from: document.getElementById("from").value,
+        to: document.getElementById("to").value,
       },
     ],
   };
@@ -157,40 +259,29 @@ function addToSideBar() {
   newWorker.innerHTML = `
     <div class="profile-picture side-bar-profile-picture"></div>
     <div class="worker-info">
-    <h5 class="name">${worker.name}</h5>
-    <small style="color: red; font-size: 12px" class="role"
-    >${worker.role}</small
-    >
+      <h5 class="name">${worker.name}</h5>
+      <small style="color: red; font-size: 12px" class="role">${worker.role}</small>
     </div>
     <img
-    style="
-    width: 14px;
-    position: absolute;
-    right: 5px;
-    bottom: 8px;
-    cursor: pointer;
-    "
-    src="delete.png"
-    alt="delete"
-    id="delete"
+      style="width: 14px; position: absolute; right: 5px; bottom: 8px; cursor: pointer;"
+      src="delete.png"
+      alt="delete"
+      class="delete-worker"
     />
-   `;
+  `;
   const newWorkerProfilePic = newWorker.querySelector(
     ".side-bar-profile-picture"
   );
-  workerProfilePicture.style.background = `url("${worker.profile}") center/cover no-repeat`;
   newWorkerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
   workersList.appendChild(newWorker);
   id++;
   workers.push(worker);
   filterByRole();
-  logAllWorkers();
-  const deleteBtn = newWorker.querySelector("#delete");
+  const deleteBtn = newWorker.querySelector(".delete-worker");
   deleteBtn.addEventListener("click", () => {
     workersList.removeChild(newWorker);
     workers = workers.filter((w) => w.id !== worker.id);
     filterByRole();
-    logAllWorkers();
   });
 }
 
@@ -200,28 +291,18 @@ function addNewExperience() {
   const newExperience = document.createElement("div");
 
   newExperience.innerHTML = `
-            <div class="experiences-separator"></div>
-            <input id="experience" type="text" placeholder="Company:" />
-            <small class="error-message"></small>
-            <input id="experience-role" type="text" placeholder="role:" />
-            <small class="error-message"></small>
-            <div class="experience-dates">
-              <label for="from">From:</label>
-              <input
-                type="date"
-                name=""
-                id="from"
-                placeholder="mm/dd/yyyy"
-                onfocus="this.type='date'"
-                onblur="if(this.value === '') this.type='text'"
-              />
-              <label for="to">To</label>
-              <input type="date" / name="" id="to" placeholder="mm/dd/yyyy"
-              onfocus="this.type='date'" onblur="if(this.value === '')
-              this.type='text'">
-            </div>
-            <button class="cancel-experience">Cancel Experience</button>
-
+    <div class="experiences-separator"></div>
+    <input class="experience-input" type="text" placeholder="Company:" />
+    <small class="error-message"></small>
+    <input class="experience-role-input" type="text" placeholder="Role:" />
+    <small class="error-message"></small>
+    <div class="experience-dates">
+      <label>From:</label>
+      <input class="experience-from" type="date" onfocus="this.type='date'" onblur="if(this.value==='')this.type='text'" />
+      <label>To:</label>
+      <input class="experience-to" type="date" onfocus="this.type='date'" onblur="if(this.value==='')this.type='text'" />
+    </div>
+    <button class="cancel-experience" type="button">Cancel Experience</button>
   `;
   const cancelExperience = newExperience.querySelector(".cancel-experience");
   experiences.appendChild(newExperience);
@@ -229,9 +310,12 @@ function addNewExperience() {
   cancelExperience.addEventListener("click", (e) => {
     e.preventDefault();
     experiences.removeChild(newExperience);
+    newExperiences = newExperiences.filter((exp) => exp !== newExperience);
   });
 }
-
+// -------------------------STAFF MANIPULATION----------------
+//======================================================
+// ---------KNOCK-ON-DOOR LISTENERS-------------
 conferenceDoor.addEventListener("click", (e) => {
   e.preventDefault();
   availableWorkersPopup.showModal();
@@ -300,20 +384,5 @@ availableWorkersPopup.addEventListener("click", (e) => {
     worksphere.style.filter = "blur(0)";
   }
 });
-// -------------------------STAFF MANIPULATION----------------
+// ---------KNOCK-ON-DOOR LISTENERS-------------
 //======================================================
-
-function logAllWorkers() {
-  // console.log("---- MASTER ARRAY ----");
-  // console.log(workers);
-  // console.log("---- IT Workers ----");
-  // console.log(itWorkers);
-  // console.log("---- Receptionists ----");
-  // console.log(receptionists);
-  // console.log("---- Security Agents ----");
-  // console.log(securityAgents);
-  // console.log("---- Managers ----");
-  // console.log(managers);
-  // console.log("---- Nettoyage Workers ----");
-  // console.log(nettoyageWorkers);
-}
