@@ -518,3 +518,42 @@ label {
   color: #666;
   font-size: 12px;
 }
+
+@media (max-width: 667px) {
+  main {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  aside {
+    height: 300px;
+  }
+
+  .worksphere .zone-title {
+    font-size: 8px;
+    position: absolute;
+    top: 2px;
+    background-color: transparent;
+    width: 110px;
+    left: -20px;
+    color: black;
+  }
+
+  .room-door img {
+    width: 20px;
+    position: absolute;
+    top: 50%;
+  }
+}
+
+@media (max-width: 1050px) {
+  .worksphere .zone-title {
+    font-size: 10px;
+  }
+  .room-door img {
+    width: 20px;
+    position: absolute;
+    top: 50%;
+  }
+}

@@ -216,7 +216,6 @@ workerExperience.addEventListener("input", checkAllValid);
 workerExperienceRole.addEventListener("input", checkAllValid);
 selectOptions.addEventListener("change", checkAllValid);
 
-//======================================================
 // -----------------------ROLES SELECTION-------------------
 const roles = [
   "Réceptionnistes",
@@ -229,10 +228,10 @@ const roles = [
 roles.forEach((role) => {
   const option = document.createElement("option");
   option.textContent = role;
+  
   selectOptions.appendChild(option);
 });
 // -----------------------ROLES SELECTION-------------------
-//======================================================
 // -------------------------STAFF MANIPULATION----------------
 function addNewWorker() {
   addWorker.addEventListener("click", showAddWorkerModal);
@@ -521,7 +520,7 @@ function displayInitialWorkers() {
       <div class="worker-info">
         <h5 class="name">${worker.name}</h5>
         <small style="color: red; font-size: 12px" class="role">${worker.role}</small>
-      </div>
+      </div>  
       <img
         style="width: 14px; position: absolute; right: 5px; bottom: 8px; cursor: pointer;"
         src="delete.png"
