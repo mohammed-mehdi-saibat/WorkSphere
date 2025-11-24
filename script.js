@@ -444,6 +444,69 @@ function getEligibleWorkers(zoneName) {
       (allowedRoles.includes("all") || allowedRoles.includes(worker.role))
   );
 }
+
+function assignWorkerToZone(worker, zoneName) {
+  worker.assignedZone = zoneName;
+
+  const sidebarWorker = Array.from(workersList.children).find(
+    (card) => card.querySelector(".name").textContent === worker.name
+  );
+
+  if (sidebarWorker) workersList.removeChild(sidebarWorker);
+
+  const zoneContainer = document.querySelector(`.zone--${zoneName} .workers`);
+
+  const workerCard = document.createElement("div");
+  workerCard.classList.add("zone-worker");
+  workerCard.innerHTML = `
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+    <div style="background: url('${worker.profile}') center/cover no-repeat; width: 30px; height: 30px; border-radius: 50%;"></div>
+    <p style="font-size: 10px; background-color: white;">${worker.name}</p>
+    <button style="font-size: 10px; color: white; background-color: red; border-radius: 10px; border: none; outline: none; position: absolute; top: 0; left: -2px; padding: 2px; cursor: pointer" class="remove-worker">X</button>
+  </div>
+  `;
+
+  workerCard.querySelector(".remove-worker").addEventListener("click", () => {
+    removeWorkerFromZone(worker.name, workerCard);
+  });
+
+  zoneContainer.appendChild(workerCard);
+}
+
+function removeWorkerFromZone(workerName, zoneWorkerCard) {
+  const worker = workers.find((w) => w.name === workerName);
+
+  if (!worker) return;
+
+  worker.assignedZone = null;
+  zoneWorkerCard.remove();
+
+  const newWorker = document.createElement("div");
+  newWorker.classList.add("worker");
+  newWorker.innerHTML = `
+    <div class="profile-picture side-bar-profile-picture"></div>
+    <div class="worker-info">
+      <h5 class="name">${worker.name}</h5>
+      <small style="color: red; font-size: 12px" class="role">${worker.role}</small>
+    </div>
+    <img
+      style="width: 14px; position: absolute; right: 5px; bottom: 8px; cursor: pointer;"
+      src="delete.png"
+      alt="delete"
+      class="delete-worker"
+    />
+  `;
+
+  newWorker.querySelector(
+    ".side-bar-profile-picture"
+  ).style.background = `url("${worker.profile}") center/cover no-repeat`;
+  workersList.appendChild(newWorker);
+
+  newWorker.querySelector(".delete-worker").addEventListener("click", () => {
+    workersList.removeChild(newWorker);
+    workers = workers.filter((w) => w.id !== worker.id);
+  });
+}
 //---------------------------------Zone rules-----------------
 
 //----------------Workers to start with
@@ -652,7 +715,7 @@ conferenceDoor.addEventListener("click", (e) => {
 
   availableWorkersPopup.innerHTML = `
     <h3>CONFERENCE ROOM</h3>
-    <p>Available Workers:</p>
+    <p style="margin-bottom: 20px">Available Workers:</p>
     <div class="popup-workers-list"></div>
   `;
 
@@ -664,7 +727,7 @@ conferenceDoor.addEventListener("click", (e) => {
     const workerCard = document.createElement("div");
     workerCard.classList.add("popup-worker");
     workerCard.innerHTML = `
-      <div class="profile-picture popup-profile-picture"></div>
+      <div  class="profile-picture popup-profile-picture"></div>
       <div class="worker-info">
         <h5 class="name">${worker.name}</h5>
         <small style="color: red; font-size: 12px" class="role">${worker.role}</small>
@@ -673,6 +736,13 @@ conferenceDoor.addEventListener("click", (e) => {
 
     const workerProfilePic = workerCard.querySelector(".popup-profile-picture");
     workerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
+    workerCard.addEventListener("click", () => {
+      assignWorkerToZone(worker, "conference");
+      availableWorkersPopup.close();
+      sideBar.style.filter = "blur(0)";
+      worksphere.style.filter = "blur(0)";
+    });
 
     popupWorkersList.appendChild(workerCard);
   });
@@ -689,7 +759,7 @@ receptionDoor.addEventListener("click", (e) => {
 
   availableWorkersPopup.innerHTML = `
     <h3>RECEPTION ROOM</h3>
-    <p>Available Workers:</p>
+    <p style="margin-bottom: 20px">Available Workers:</p>
     <div class="popup-workers-list"></div>
   `;
 
@@ -710,6 +780,13 @@ receptionDoor.addEventListener("click", (e) => {
 
     const workerProfilePic = workerCard.querySelector(".popup-profile-picture");
     workerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
+    workerCard.addEventListener("click", () => {
+      assignWorkerToZone(worker, "reception");
+      availableWorkersPopup.close();
+      sideBar.style.filter = "blur(0)";
+      worksphere.style.filter = "blur(0)";
+    });
 
     popupWorkersList.appendChild(workerCard);
   });
@@ -726,7 +803,7 @@ serverDoor.addEventListener("click", (e) => {
 
   availableWorkersPopup.innerHTML = `
     <h3>SERVER ROOM</h3>
-    <p>Available Workers:</p>
+    <p style="margin-bottom: 20px">Available Workers:</p>
     <div class="popup-workers-list"></div>
   `;
 
@@ -747,6 +824,13 @@ serverDoor.addEventListener("click", (e) => {
 
     const workerProfilePic = workerCard.querySelector(".popup-profile-picture");
     workerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
+    workerCard.addEventListener("click", () => {
+      assignWorkerToZone(worker, "server");
+      availableWorkersPopup.close();
+      sideBar.style.filter = "blur(0)";
+      worksphere.style.filter = "blur(0)";
+    });
 
     popupWorkersList.appendChild(workerCard);
   });
@@ -763,7 +847,7 @@ securityDoor.addEventListener("click", (e) => {
 
   availableWorkersPopup.innerHTML = `
     <h3>SECURITY ROOM</h3>
-    <p>Available Workers:</p>
+    <p style="margin-bottom: 20px">Available Workers:</p>
     <div class="popup-workers-list"></div>
   `;
 
@@ -784,6 +868,13 @@ securityDoor.addEventListener("click", (e) => {
 
     const workerProfilePic = workerCard.querySelector(".popup-profile-picture");
     workerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
+    workerCard.addEventListener("click", () => {
+      assignWorkerToZone(worker, "security");
+      availableWorkersPopup.close();
+      sideBar.style.filter = "blur(0)";
+      worksphere.style.filter = "blur(0)";
+    });
 
     popupWorkersList.appendChild(workerCard);
   });
@@ -800,7 +891,7 @@ staffDoor.addEventListener("click", (e) => {
 
   availableWorkersPopup.innerHTML = `
     <h3>STAFF ROOM</h3>
-    <p>Available Workers:</p>
+    <p style="margin-bottom: 20px">Available Workers:</p>
     <div class="popup-workers-list"></div>
   `;
 
@@ -821,6 +912,13 @@ staffDoor.addEventListener("click", (e) => {
 
     const workerProfilePic = workerCard.querySelector(".popup-profile-picture");
     workerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
+    workerCard.addEventListener("click", () => {
+      assignWorkerToZone(worker, "staff");
+      availableWorkersPopup.close();
+      sideBar.style.filter = "blur(0)";
+      worksphere.style.filter = "blur(0)";
+    });
 
     popupWorkersList.appendChild(workerCard);
   });
@@ -837,7 +935,7 @@ archivesDoor.addEventListener("click", (e) => {
 
   availableWorkersPopup.innerHTML = `
     <h3>ARCHIVES ROOM</h3>
-    <p>Available Workers:</p>
+    <p style="margin-bottom: 20px">Available Workers:</p>
     <div class="popup-workers-list"></div>
   `;
 
@@ -858,6 +956,13 @@ archivesDoor.addEventListener("click", (e) => {
 
     const workerProfilePic = workerCard.querySelector(".popup-profile-picture");
     workerProfilePic.style.background = `url("${worker.profile}") center/cover no-repeat`;
+
+    workerCard.addEventListener("click", () => {
+      assignWorkerToZone(worker, "archives");
+      availableWorkersPopup.close();
+      sideBar.style.filter = "blur(0)";
+      worksphere.style.filter = "blur(0)";
+    });
 
     popupWorkersList.appendChild(workerCard);
   });

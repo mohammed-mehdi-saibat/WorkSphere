@@ -373,6 +373,52 @@ label {
   overflow-y: auto;
 }
 
+.popup-workers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.popup-worker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 1px 0px 8px #ccc;
+  padding: 7px 10px;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  border-left: 3px solid #1138f7;
+  position: relative;
+}
+
+.popup-worker:hover {
+  transform: translateX(3px);
+}
+
+.popup-profile-picture {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid gray;
+}
+
+.popup-worker .worker-info {
+  text-align: left;
+}
+
+.popup-worker .name {
+  margin: 0;
+  font-size: 14px;
+}
+
+.popup-worker .role {
+  color: red;
+  font-size: 12px;
+}
+
 /* ----------------------------------Worker Profile Popup */
 
 .worker-profile-popup {
@@ -389,15 +435,6 @@ label {
   text-align: center;
   overflow-y: auto;
 }
-
-/* .worker-profile-popup {
-  border: none;
-  border-radius: 12px;
-  padding: 30px;
-  width: 90%;
-  max-width: 450px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-} */
 
 .worker-profile-popup::backdrop {
   background: rgba(0, 0, 0, 0.5);
