@@ -113,7 +113,7 @@ git clone https://github.com/mohammed-mehdi-saibat/WorkSphere.git
 📅 Planification du projet
 
 Organisation du travail via Trello / Jira / GitHub Projects
-Lien de planification : (à compléter) <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+Lien de planification : [https://trello.com/b/EI382Dc4/virtual-worksphere]
 
 🌍 Déploiement
 
